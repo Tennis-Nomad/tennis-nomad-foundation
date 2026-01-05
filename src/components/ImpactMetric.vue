@@ -27,6 +27,12 @@ defineProps({
 .impact-metric {
   text-align: center;
   padding: var(--spacing-md);
+  min-width: 200px;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .metric-value {

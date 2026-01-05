@@ -7,12 +7,9 @@
         </p>
         <div class="footer-links">
           <div class="social-links">
-            <a href="#" aria-label="Instagram">Instagram</a>
-            <a href="#" aria-label="Facebook">Facebook</a>
-            <a href="#" aria-label="Twitter">Twitter</a>
-          </div>
-          <div class="legal-info">
-            <span class="label">Tennis Nomad Foundation is a registered 501(c)(3) nonprofit organization.</span>
+            <a href="https://www.instagram.com/tennisnomadfoundation/" aria-label="Instagram">Instagram</a>
+            <a href="https://www.youtube.com/watch?v=r5BL5lWnjJU" aria-label="YouTube">YouTube</a>
+            <a href="https://x.com/tennis_nomad" aria-label="Twitter">Twitter</a>
           </div>
         </div>
       </div>

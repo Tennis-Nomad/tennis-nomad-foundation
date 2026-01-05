@@ -99,11 +99,17 @@
         </div>
       </div>
     </section>
+    <DonateModal 
+      :isOpen="isModalOpen"
+      @close="closeModal"
+      @submit="handleFormSubmit"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import DonateModal from '../components/DonateModal.vue'
 
 const oneTimeAmounts = [25, 50, 100, 250, 500]
 const monthlyAmounts = [10, 25, 50, 100]
@@ -112,6 +118,7 @@ const selectedAmount = ref(null)
 const selectedType = ref(null)
 const customAmount = ref('')
 const customMonthlyAmount = ref('')
+const isModalOpen = ref(false)
 
 const selectAmount = (amount, type) => {
   selectedAmount.value = amount
@@ -124,17 +131,19 @@ const selectAmount = (amount, type) => {
 }
 
 const proceedToDonate = (type) => {
-  // Placeholder for payment integration
-  const amount = type === 'one-time' 
-    ? (customAmount.value || selectedAmount.value)
-    : (customMonthlyAmount.value || selectedAmount.value)
-  
-  if (!amount) {
-    alert('Please select or enter a donation amount.')
-    return
-  }
-  
-  alert(`Thank you! Payment integration will be implemented here. Selected: $${amount} ${type === 'monthly' ? 'per month' : 'one-time'}`)
+  // Open the modal instead of processing payment
+  isModalOpen.value = true
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+}
+
+const handleFormSubmit = (formData) => {
+  // Handle form submission
+  // In the future, this could send data to a backend API
+  console.log('Form submitted:', formData)
+  // The modal will show success state automatically
 }
 
 const funds = [

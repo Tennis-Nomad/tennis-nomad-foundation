@@ -21,6 +21,8 @@
             :description="program.description"
             :outcomes="program.outcomes"
             :image="program.image"
+            :centered="program.centered"
+            :imageAlignBottom="program.imageAlignBottom"
           />
         </div>
       </div>
@@ -35,7 +37,13 @@
             v-for="(visual, index) in visuals" 
             :key="index"
           >
-            <div class="image-placeholder">
+            <img 
+              v-if="visual.url" 
+              :src="visual.url" 
+              :alt="visual.alt || 'Program Image'"
+              class="visual-img"
+            />
+            <div v-else class="image-placeholder">
               <span>{{ visual.alt || 'Program Image' }}</span>
             </div>
           </div>
@@ -59,7 +67,10 @@ const programs = [
       'Social skills and teamwork',
       'Confidence building'
     ],
-    image: { alt: 'Youth Tennis Clinic' }
+    image: { 
+      url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Education/Education_3.jpg',
+      alt: 'Youth Tennis Clinic' 
+    }
   },
   {
     name: 'Coaching Workshops',
@@ -71,7 +82,10 @@ const programs = [
       'Youth development techniques',
       'Community engagement strategies'
     ],
-    image: { alt: 'Coaching Workshop' }
+    image: { 
+      url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/sherpa_8.jpg',
+      alt: 'Coaching Workshop' 
+    }
   },
   {
     name: 'Equipment Donations',
@@ -83,17 +97,40 @@ const programs = [
       'Sustainable program foundation',
       'Community ownership'
     ],
-    image: { alt: 'Equipment Donation' }
+    image: { 
+      url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/equipment_donation.jpg',
+      alt: 'Equipment Donation' 
+    },
+    centered: true,
+    imageAlignBottom: true
   }
 ]
 
 const visuals = [
-  { alt: 'Program Photo 1' },
-  { alt: 'Program Photo 2' },
-  { alt: 'Program Photo 3' },
-  { alt: 'Program Photo 4' },
-  { alt: 'Program Photo 5' },
-  { alt: 'Program Photo 6' }
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/1.jpg',
+    alt: 'Program Photo 1' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/2.jpg',
+    alt: 'Program Photo 2' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/3.jpg',
+    alt: 'Program Photo 3' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/4.jpg',
+    alt: 'Program Photo 4' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/5.jpg',
+    alt: 'Program Photo 5' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/6.jpg',
+    alt: 'Program Photo 6' 
+  }
 ]
 </script>
 
@@ -118,21 +155,27 @@ const visuals = [
 
 .visuals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
 }
 
 .visual-item {
   width: 100%;
-  height: 300px;
+  height: 450px;
   overflow: hidden;
 }
 
 .visual-item .image-placeholder {
   width: 100%;
   height: 100%;
-  min-height: 300px;
+  min-height: 450px;
+}
+
+.visual-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 @media (max-width: 767px) {
@@ -146,11 +189,11 @@ const visuals = [
   }
 
   .visual-item {
-    height: 200px;
+    height: 280px;
   }
 
   .visual-item .image-placeholder {
-    min-height: 200px;
+    min-height: 280px;
   }
 }
 </style>
