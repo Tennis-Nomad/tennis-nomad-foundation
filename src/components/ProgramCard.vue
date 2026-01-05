@@ -1,7 +1,14 @@
 <template>
-  <div class="program-card">
+  <div class="program-card" :class="{ 'centered': centered }">
     <div class="program-image" v-if="image">
-      <div class="image-placeholder">
+      <img 
+        v-if="image.url" 
+        :src="image.url" 
+        :alt="image.alt || 'Program Image'"
+        class="program-img"
+        :class="{ 'align-bottom': imageAlignBottom }"
+      />
+      <div v-else class="image-placeholder">
         <span>{{ image.alt || 'Program Image' }}</span>
       </div>
     </div>
@@ -37,6 +44,14 @@ defineProps({
   image: {
     type: Object,
     default: null
+  },
+  centered: {
+    type: Boolean,
+    default: false
+  },
+  imageAlignBottom: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -55,14 +70,30 @@ defineProps({
 
 .program-image {
   width: 100%;
-  height: 250px;
+  height: 350px;
   overflow: hidden;
 }
 
 .program-image .image-placeholder {
   width: 100%;
   height: 100%;
-  min-height: 250px;
+  min-height: 350px;
+}
+
+.program-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.program-img.align-bottom {
+  object-position: bottom;
+}
+
+.program-card.centered {
+  grid-column: 1 / -1;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .program-content {

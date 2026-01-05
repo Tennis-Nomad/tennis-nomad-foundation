@@ -23,12 +23,17 @@
             <div class="story-quote">
               <p class="quote-text">"{{ story.quote }}"</p>
               <div class="quote-author">
-                <span class="author-name">{{ story.author }}</span>
                 <span class="author-role label" v-if="story.role">{{ story.role }}</span>
               </div>
             </div>
             <div class="story-image" v-if="story.image">
-              <div class="image-placeholder">
+              <img 
+                v-if="story.image.url" 
+                :src="story.image.url" 
+                :alt="story.image.alt || 'Story Image'"
+                class="story-img"
+              />
+              <div v-else class="image-placeholder">
                 <span>{{ story.image.alt || 'Story Image' }}</span>
               </div>
             </div>
@@ -46,7 +51,13 @@
             v-for="(photo, index) in photos" 
             :key="index"
           >
-            <div class="image-placeholder">
+            <img 
+              v-if="photo.url" 
+              :src="photo.url" 
+              :alt="photo.alt || 'Impact Photo'"
+              class="photo-img"
+            />
+            <div v-else class="image-placeholder">
               <span>{{ photo.alt || 'Impact Photo' }}</span>
             </div>
           </div>
@@ -61,34 +72,34 @@ import ImpactMetric from '../components/ImpactMetric.vue'
 
 const metrics = [
   {
-    value: '500+',
-    label: 'Kids Reached',
-    description: 'Children who have participated in our programs'
+    value: '200+',
+    label: 'Kids',
+    description: ''
   },
   {
-    value: '50+',
-    label: 'Clinics Held',
-    description: 'Tennis clinics and workshops conducted'
+    value: '60+',
+    label: 'Hours of Clinics Held',
+    description: ''
   },
   {
-    value: '300+',
+    value: '200+',
     label: 'Rackets Donated',
-    description: 'Equipment provided to communities'
+    description: ''
   },
   {
-    value: '25+',
+    value: '5+',
     label: 'Coaches Trained',
-    description: 'Local coaches equipped with skills'
+    description: ''
   },
   {
-    value: '10+',
+    value: '15+',
     label: 'Communities Served',
-    description: 'Locations where we have active programs'
+    description: ''
   },
   {
     value: '1',
     label: 'Countries',
-    description: 'Currently active, with expansion planned'
+    description: ''
   }
 ]
 
@@ -96,35 +107,65 @@ const stories = [
   {
     id: 1,
     quote: 'Before this program, I never thought I could play tennis. Now it\'s my favorite thing, and I want to become a coach one day.',
-    author: 'Maria',
     role: 'Youth Program Participant',
-    image: { alt: 'Maria Story' }
+    image: { 
+      url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/5.jpg',
+      alt: 'Youth Program Story' 
+    }
   },
   {
     id: 2,
     quote: 'The coaching workshop gave me the tools and confidence to start my own program. Now I\'m teaching 30 kids in my community.',
-    author: 'Carlos',
     role: 'Local Coach',
-    image: { alt: 'Carlos Story' }
+    image: { 
+      url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/7.jpg',
+      alt: 'Local Coach Story' 
+    }
   },
   {
     id: 3,
     quote: 'This program has brought our community together in ways I never expected. The kids are happier, more confident, and we have something positive to rally around.',
-    author: 'Ana',
     role: 'Community Leader',
-    image: { alt: 'Ana Story' }
+    image: { 
+      url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/Programs/8.jpg',
+      alt: 'Community Leader Story' 
+    }
   }
 ]
 
 const photos = [
-  { alt: 'Impact Photo 1' },
-  { alt: 'Impact Photo 2' },
-  { alt: 'Impact Photo 3' },
-  { alt: 'Impact Photo 4' },
-  { alt: 'Impact Photo 5' },
-  { alt: 'Impact Photo 6' },
-  { alt: 'Impact Photo 7' },
-  { alt: 'Impact Photo 8' }
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/1.jpg',
+    alt: 'Impact Photo 1' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/2.jpg',
+    alt: 'Impact Photo 2' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/3.jpg',
+    alt: 'Impact Photo 3' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/4.jpg',
+    alt: 'Impact Photo 4' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/5.jpg',
+    alt: 'Impact Photo 5' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/6.jpg',
+    alt: 'Impact Photo 6' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/7.jpg',
+    alt: 'Impact Photo 7' 
+  },
+  { 
+    url: 'https://storage.googleapis.com/nomadtennis-public/Foundation_assets/storytelling/8.jpg',
+    alt: 'Impact Photo 8' 
+  }
 ]
 </script>
 
@@ -134,15 +175,22 @@ const photos = [
 }
 
 .metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   gap: var(--spacing-lg);
   margin-top: var(--spacing-lg);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .stories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   gap: var(--spacing-lg);
   margin-top: var(--spacing-lg);
 }
@@ -151,6 +199,14 @@ const photos = [
   background: var(--color-white);
   border: 1px solid rgba(45, 79, 63, 0.1);
   overflow: hidden;
+  min-width: 350px;
+}
+
+@media (min-width: 768px) {
+  .story-card {
+    flex: 0 1 calc((100% - var(--spacing-lg)) / 2);
+    max-width: calc((100% - var(--spacing-lg)) / 2);
+  }
 }
 
 .story-quote {
@@ -158,6 +214,7 @@ const photos = [
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  text-align: center;
 }
 
 .quote-text {
@@ -165,6 +222,7 @@ const photos = [
   font-style: italic;
   line-height: 1.8;
   margin: 0;
+  text-align: center;
 }
 
 .quote-author {
@@ -172,6 +230,7 @@ const photos = [
   flex-direction: column;
   gap: var(--spacing-xs);
   margin-top: var(--spacing-sm);
+  align-items: center;
 }
 
 .author-name {
@@ -185,13 +244,19 @@ const photos = [
 
 .story-image {
   width: 100%;
-  height: 250px;
+  height: 400px;
 }
 
 .story-image .image-placeholder {
   width: 100%;
   height: 100%;
-  min-height: 250px;
+  min-height: 400px;
+}
+
+.story-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .photo-grid {
@@ -199,6 +264,7 @@ const photos = [
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
+  justify-items: center;
 }
 
 .photo-item {
@@ -213,14 +279,24 @@ const photos = [
   min-height: 350px;
 }
 
+.photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 @media (max-width: 767px) {
   .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
   }
 
   .stories-grid {
-    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .story-card {
+    width: 100%;
+    max-width: 100%;
   }
 
   .photo-grid {

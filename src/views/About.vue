@@ -1,6 +1,6 @@
 <template>
   <div class="about-page">
-    <section class="section origin-story">
+    <section ref="originStoryRef" class="section origin-story" :class="{ 'animate-in': visibleSections.originStory }">
       <div class="container">
         <div class="story-content">
           <h2 class="section-title">Our Origin</h2>
@@ -13,13 +13,11 @@
       </div>
     </section>
 
-    <section class="section connection">
+    <section ref="connectionRef" class="section connection" :class="{ 'animate-in': visibleSections.connection }">
       <div class="container">
         <div class="connection-content">
           <div class="connection-image">
-            <div class="image-placeholder">
-              <span>Tennis Nomad Ecosystem</span>
-            </div>
+            <img src="https://storage.googleapis.com/nomadtennis-public/Foundation_assets/banner.jpg" alt="Tennis Nomad Ecosystem" />
           </div>
           <div class="connection-text">
             <h2 class="section-title">Connection to Tennis Nomad</h2>
@@ -31,7 +29,7 @@
       </div>
     </section>
 
-    <section class="section mission-values">
+    <section ref="missionValuesRef" class="section mission-values" :class="{ 'animate-in': visibleSections.missionValues }">
       <div class="container">
         <h2 class="section-title text-center">Mission & Values</h2>
         <div class="values-grid">
@@ -43,13 +41,11 @@
       </div>
     </section>
 
-    <section class="section founder">
+    <section ref="founderRef" class="section founder" :class="{ 'animate-in': visibleSections.founder }">
       <div class="container">
         <div class="founder-content">
           <div class="founder-image">
-            <div class="image-placeholder">
-              <span>Founder Photo</span>
-            </div>
+            <img src="https://storage.googleapis.com/nomadtennis-public/Foundation_assets/impact_4.jpg" alt="Founder Photo" />
           </div>
           <div class="founder-text">
             <span class="label">Founder</span>
@@ -62,7 +58,7 @@
       </div>
     </section>
 
-    <section class="section philosophy">
+    <section ref="philosophyRef" class="section philosophy" :class="{ 'animate-in': visibleSections.philosophy }">
       <div class="container">
         <div class="philosophy-content">
           <h2 class="section-title">Community-First Philosophy</h2>
@@ -76,6 +72,8 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
 const values = [
   {
     title: 'Accessibility',
@@ -98,11 +96,76 @@ const values = [
     description: 'We work with local leaders and organizations to ensure our programs are culturally relevant and effective.'
   }
 ]
+
+const originStoryRef = ref(null)
+const connectionRef = ref(null)
+const missionValuesRef = ref(null)
+const founderRef = ref(null)
+const philosophyRef = ref(null)
+
+const visibleSections = ref({
+  originStory: false,
+  connection: false,
+  missionValues: false,
+  founder: false,
+  philosophy: false
+})
+
+let observer = null
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (entry.target === originStoryRef.value) {
+            visibleSections.value.originStory = true
+          } else if (entry.target === connectionRef.value) {
+            visibleSections.value.connection = true
+          } else if (entry.target === missionValuesRef.value) {
+            visibleSections.value.missionValues = true
+          } else if (entry.target === founderRef.value) {
+            visibleSections.value.founder = true
+          } else if (entry.target === philosophyRef.value) {
+            visibleSections.value.philosophy = true
+          }
+        }
+      })
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+  )
+
+  if (originStoryRef.value) observer.observe(originStoryRef.value)
+  if (connectionRef.value) observer.observe(connectionRef.value)
+  if (missionValuesRef.value) observer.observe(missionValuesRef.value)
+  if (founderRef.value) observer.observe(founderRef.value)
+  if (philosophyRef.value) observer.observe(philosophyRef.value)
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>
 
 <style scoped>
 .about-page {
   width: 100%;
+}
+
+.section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section.animate-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .story-content,
@@ -131,10 +194,11 @@ const values = [
   height: 400px;
 }
 
-.connection-image .image-placeholder,
-.founder-image .image-placeholder {
+.connection-image img,
+.founder-image img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
   min-height: 400px;
 }
 
@@ -192,8 +256,8 @@ const values = [
     height: 300px;
   }
 
-  .connection-image .image-placeholder,
-  .founder-image .image-placeholder {
+  .connection-image img,
+  .founder-image img {
     min-height: 300px;
   }
 
