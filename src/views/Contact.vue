@@ -39,9 +39,8 @@
                   <option value="">Select an option</option>
                   <option value="general">General Inquiry</option>
                   <option value="partnership">Partnership</option>
-                  <option value="volunteer">Volunteer</option>
                   <option value="media">Media</option>
-                  <option value="equipment-donation">Equipment Donation</option>
+                  <option value="custom">Custom</option>
                   <option value="other">Other</option>
                 </select>
               </div>
@@ -57,9 +56,17 @@
                 ></textarea>
               </div>
 
-              <button type="submit" class="btn btn-primary">
-                Send Message
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                :disabled="isLoading"
+              >
+                {{ isLoading ? 'Sending...' : 'Send Message' }}
               </button>
+
+              <div v-if="statusMessage" :class="['status-message', statusType]">
+                {{ statusMessage }}
+              </div>
             </form>
           </div>
 
@@ -109,17 +116,55 @@ const form = ref({
   message: ''
 })
 
-const handleSubmit = () => {
-  // Placeholder for form submission
-  alert('Thank you for your message! Form submission will be implemented with backend integration.')
-  console.log('Form submitted:', form.value)
-  
-  // Reset form
-  form.value = {
-    name: '',
-    email: '',
-    inquiryType: '',
-    message: ''
+const isLoading = ref(false)
+const statusMessage = ref('')
+const statusType = ref('') // 'success' or 'error'
+
+const API_URL = 'https://api.nomadtennis.com'
+
+const handleSubmit = async () => {
+  isLoading.value = true
+  statusMessage.value = ''
+  statusType.value = ''
+
+  try {
+    const response = await fetch(`${API_URL}/message`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: form.value.name,
+        email: form.value.email,
+        inquiryType: form.value.inquiryType,
+        message: form.value.message
+      })
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to send message')
+    }
+
+    // Success
+    statusMessage.value = data.message || 'Your message has been sent successfully!'
+    statusType.value = 'success'
+
+    // Reset form
+    form.value = {
+      name: '',
+      email: '',
+      inquiryType: '',
+      message: ''
+    }
+
+  } catch (error) {
+    console.error('Error sending message:', error)
+    statusMessage.value = error.message || 'Failed to send message. Please try again later.'
+    statusType.value = 'error'
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -227,6 +272,30 @@ const handleSubmit = () => {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-size: 0.875rem;
+}
+
+.status-message {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.status-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @media (max-width: 767px) {
